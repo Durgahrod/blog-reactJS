@@ -30,7 +30,7 @@ export default class Fire {
     }
 
     getArticles(callback) {
-        let ref = this.ref.orderBy("created_at");
+        let ref = this.ref.orderBy("createdAt");
         this.unsubscribe = ref.onSnapshot(snapshot => {
             let articles = [];
             snapshot.forEach(doc => {

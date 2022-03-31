@@ -48,7 +48,9 @@ class App extends React.Component {
             icon={<EditOutlined />}
             Tooltip="hehe"
           />
-
+          {this.state.articles.map(article => (
+            <p>{article.title} <br />{article.content}</p>
+          ))}
           <ArticleModal
             onCancel={() => this.setState({ isModalVisible: false })}
             isVisible={this.state.isModalVisible}
