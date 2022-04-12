@@ -5,29 +5,38 @@ import Fire from '../Fire'
 
 
 export default class ArticleModal extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            title: "",
-            content: "",
+            title: props.article ? props.article.title : "",
+            content: props.article ? props.article.content : "",
+            image: props.article ? props.article.image : "",
             error: null
         }
-
     }
 
     handleSubmit = () => {
         const firebase = new Fire(err => {
             if (err) {
                 this.setState({ error: err })
-            } else {
+            } else if (this.state.article) {
                 let newArticle = {
                     title: this.state.title,
                     content: this.state.content,
+                    image: this.state.image,
                     createdAt: new Date(),
                     comments: []
                 }
                 firebase.addArticle(newArticle);
+            } else{
+                let currentArticle = this.props.article
+                currentArticle.title = this.state.title
+                currentArticle.content = this.state.content
+                currentArticle.image = this.state.image
+                                
+                firebase.updateArticle(currentArticle)
             }
+            this.props.onCancel();
         })
     }
 
@@ -35,8 +44,10 @@ export default class ArticleModal extends React.Component {
     handleChange = (e) => {
         if (e.target.name === "title") {
             this.setState({ title: e.target.value })
-        } else {
+        } else if (e.target.name === "content") {
             this.setState({ content: e.target.value })
+        } else {
+            this.setState({ image: e.target.value})
         }
     }
 
@@ -48,6 +59,7 @@ export default class ArticleModal extends React.Component {
                     <ArticleForm
                         title={this.state.title}
                         content={this.state.content}
+                        image={this.state.image}
                         handleChange={this.handleChange}
                     >
                     </ArticleForm>

@@ -11,6 +11,9 @@ export default class ArticleForm extends Component {
 
                 <label htmlFor="content">Contenu</label>
                 <TextArea name="content" id="content" placeholder="Contenu de l'article" onChange={this.props.handleChange} value={this.props.content}></TextArea>
+
+                <label htmlFor="image">Image (URL)</label>
+                <TextArea name="image" id="image" placeholder="miniature de l'article" onChange={this.props.handleChange} value={this.props.image}></TextArea>
             </form>
         )
     }
