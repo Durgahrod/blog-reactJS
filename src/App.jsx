@@ -3,12 +3,14 @@ import news from './Newspaper_Cover.svg.png';
 import './App.css';
 import React from 'react';
 import AddButton from './components/AddButton';
-import { EditFilled, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditFilled, EditOutlined, DeleteOutlined, ReadOutlined } from '@ant-design/icons';
 import ArticleModal from './components/ArticleModal';
+import CommentModal from './components/CommentModal';
 import Fire from './Fire';
-import { Card, Col, Row, Popconfirm, message, Spin } from 'antd';
+import { Card, Col, Row, Popconfirm, message, Spin, Input, Space } from 'antd';
 
 const { Meta } = Card;
+const { Search } = Input;
 
 class App extends React.Component {
   constructor() {
@@ -18,9 +20,11 @@ class App extends React.Component {
       loading: true,
       error: null,
       isModalVisible: false,
+      isReadModalVisible: false,
       selectedArticle: null,
       loading: true,
-      video: false
+      video: false,
+      filteredArticles: []
     };
   };
 
@@ -32,7 +36,8 @@ class App extends React.Component {
         firebase.getArticles(articles => {
           this.setState({
             articles: articles,
-            loading: false
+            loading: false,
+            filteredArticles: articles
           });
         });
       }
@@ -40,9 +45,20 @@ class App extends React.Component {
   }
 
   cancel(e) {
-    console.log(e);
     message.error("L'élément n'a pas été supprimé");
   }
+
+  handleFilter = (e) => {
+    const articlesFilter = this.state.articles.filter(article => {
+      return article.title.includes(e.target.value) ||
+        article.content.includes(e.target.value);
+    })
+
+    this.setState({ filteredArticles: articlesFilter });
+
+
+  };
+
 
   handleDelete = (article) => {
     const firebase = new Fire(err => {
@@ -60,33 +76,41 @@ class App extends React.Component {
       <div className="App">
         <header className="App-header">
           <div>
-            <br />
-            <a href = "https://www.youtube.com/watch?v=EHnu9mBuj6c"><img src={logo} className="App-logo" alt="Hexagone_logo" /></a>
+            <div className="secret">
+              <p>Testez votre vue ! Cliquez au centre du logo Hexagone !</p>
+            </div>
+            <a href="https://www.youtube.com/watch?v=EHnu9mBuj6c"><img src={logo} className="App-logo" alt="Hexagone_logo" /></a>
           </div>
           <p>News</p>
           <AddButton
             content="Rédiger un article"
             onClick={() => this.setState({ isModalVisible: true })}
             size="large"
-            shape="circle"
+            shape="round"
             icon={<EditFilled />}
             Tooltip="Cliquez pour commencer"
           />
+
+          <br />
+          
+            <Input placeholder="Rechercher un article" onChange={this.handleFilter} />
+          
+
+
           <br />
 
           <div className="article-container">
             {this.state.loading && <Spin size="large" />}
-            {this.state.articles.map(article => (
+            {this.state.filteredArticles.map(article => (
               <Card
                 title={article.title}
                 hoverable
-                style={{ width: 240 }}
+                style={{ width: 240}}
                 cover={<img src={article.image} alt="News_logo" />}
               >
                 <Meta title={article.content} description={article.createdAt.toDate().toLocaleDateString('fr-FR')} />
                 <hr />
-                {console.log(article.createdAt)}
-                <div>
+                <div className="icons">
                   <Popconfirm
                     title="Êtes-vous sûr de vouloir supprimer cet élément ?"
                     onConfirm={() => this.handleDelete(article)}
@@ -98,6 +122,7 @@ class App extends React.Component {
                   </Popconfirm>
 
                   <AddButton icon={<EditOutlined />} onClick={() => this.setState({ selectedArticle: article, isModalVisible: true })}>Modifier</AddButton>
+                  <AddButton icon={<ReadOutlined />} onClick={() => this.setState({ selectedArticle: article, isReadModalVisible: true })}>Lire l'article</AddButton>
                 </div>
               </Card>
 
@@ -110,7 +135,15 @@ class App extends React.Component {
             article={this.state.selectedArticle}
           />)
           }
+
+          {this.state.isReadModalVisible && (<CommentModal
+            onCancel={() => this.setState({ isReadModalVisible: false, selectedArticle: null })}
+            isReadVisible={this.state.isReadModalVisible}
+            article={this.state.selectedArticle}
+          />)
+          }
         </header>
+        {/* <body className="App-header"></body> */}
       </div>
     );
   }
