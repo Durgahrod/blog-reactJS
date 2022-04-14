@@ -78,7 +78,7 @@ class App extends React.Component {
             <div className="secret">
               <p>Testez votre vue ! Cliquez au centre du logo Hexagone !</p>
             </div>
-            <a href="https://www.youtube.com/watch?v=EHnu9mBuj6c"><img src={logo} className="App-logo" alt="Hexagone_logo" /></a>
+            <a href="https://youtu.be/cBkWhkAZ9ds"><img src={logo} className="App-logo" alt="Hexagone_logo" /></a>
           </div>
           <p>Actualité</p>
           <AddButton
