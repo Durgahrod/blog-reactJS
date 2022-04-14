@@ -43,7 +43,7 @@ export default class ArticleModal extends React.Component {
                 if (newArticle.title === "" || newArticle.content === "" || newArticle.image === "") {
                     this.setState({ error: err })
                 } else {
-                    firebase.AddArticle(newArticle);
+                    firebase.addArticle(newArticle);
                 }
                 this.props.onCancel();
             }

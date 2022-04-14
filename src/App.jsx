@@ -1,5 +1,4 @@
 import logo from './342_logo.png';
-import news from './Newspaper_Cover.svg.png';
 import './App.css';
 import React from 'react';
 import AddButton from './components/AddButton';
@@ -81,7 +80,7 @@ class App extends React.Component {
             </div>
             <a href="https://www.youtube.com/watch?v=EHnu9mBuj6c"><img src={logo} className="App-logo" alt="Hexagone_logo" /></a>
           </div>
-          <p>News</p>
+          <p>Actualité</p>
           <AddButton
             content="Rédiger un article"
             onClick={() => this.setState({ isModalVisible: true })}
@@ -92,10 +91,10 @@ class App extends React.Component {
           />
 
           <br />
-          
-            <Input placeholder="Rechercher un article" onChange={this.handleFilter} />
-          
 
+          <div col-2 className="searchbar">
+            <Input placeholder="Rechercher un article" onChange={this.handleFilter} />
+          </div>
 
           <br />
 
@@ -105,7 +104,7 @@ class App extends React.Component {
               <Card
                 title={article.title}
                 hoverable
-                style={{ width: 240}}
+                style={{ width: 240 }}
                 cover={<img src={article.image} alt="News_logo" />}
               >
                 <Meta title={article.content} description={article.createdAt.toDate().toLocaleDateString('fr-FR')} />
@@ -143,7 +142,6 @@ class App extends React.Component {
           />)
           }
         </header>
-        {/* <body className="App-header"></body> */}
       </div>
     );
   }
